@@ -1,0 +1,199 @@
+<?php
+session_start();
+
+
+
+
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <style>
+        body
+        {
+            background:#00bcd4;
+        }
+
+        h1
+        {
+            color:#fff;
+            margin:40px 0 60px 0;
+            font-weight:300;
+        }
+
+        .our-team-main
+        {
+            width:100%;
+            height:auto;
+            border-bottom:5px #323233 solid;
+            background:#fff;
+            text-align:center;
+            border-radius:10px;
+            overflow:hidden;
+            position:relative;
+            transition:0.5s;
+            margin-bottom:28px;
+        }
+
+
+        .our-team-main img
+        {
+            border-radius:50%;
+            margin-bottom:20px;
+            width: 90px;
+        }
+
+        .our-team-main h3
+        {
+            font-size:20px;
+            font-weight:700;
+        }
+
+        .our-team-main p
+        {
+            margin-bottom:0;
+        }
+
+        .team-back
+        {
+            width:100%;
+            height:auto;
+            position:absolute;
+            top:0;
+            left:0;
+            padding:5px 15px 0 15px;
+            text-align:left;
+            background:#fff;
+
+        }
+
+        .team-front
+        {
+            width:100%;
+            height:auto;
+            position:relative;
+            z-index:10;
+            background:#fff;
+            padding:15px;
+            bottom:0px;
+            transition: all 0.5s ease;
+        }
+
+        .our-team-main:hover .team-front
+        {
+            bottom:-200px;
+            transition: all 0.5s ease;
+        }
+
+        .our-team-main:hover
+        {
+            border-color:#777;
+            transition:0.5s;
+        }
+
+        /*our-team-main*/
+
+        .logged {
+            position: fixed;
+            top: 0;
+            right: 30px;
+        }
+
+    </style>
+</head>
+<body>
+
+<h1 class="text-center">Team Design Section with Pure CSS Effect</h1>
+<?php
+if (isset($_SESSION['name'])){
+    ?>
+    <div class="logged">
+        <span class="loggedin">Felhasználónév: <?php print $_SESSION['name'];?></span>
+        <span class="logout"><a href="logout.php">Kilépés</a></span>
+    </div>
+<?php
+}else{
+    ?>
+    <div class="logged">
+
+        <span class="logout"><a href="login.php">Belépés</a></span>
+        <span> / </span>
+        <span class="logout"><a href="registration.php">Regisztráció</a></span>
+    </div>
+
+
+    <?php
+}
+?>
+<div class="container">
+    <div class="row">
+<?php
+
+require_once 'dbConnection.php';
+$query = "SELECT post.id, post.title, post.body, post.userid, user.name FROM post LEFT JOIN user ON post.userid = user.id ";
+$result = mysqli_query($conn, $query);
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+
+
+
+//        print $row['title'];
+        ?>
+
+
+        <!--team-1-->
+        <div class="col-lg-4">
+            <div class="our-team-main">
+
+                <div class="team-front">
+                    <img  <?='src="http://placehold.it/110x110/9c27b0/fff?text='.$row['name'].'"' ?> class="img-fluid" />
+                    <h3><?= $row['title'];?></h3>
+                    <p>Web Designer</p>
+                </div>
+
+                <div class="team-back">
+	<span>
+	<?=$row['body']?>
+        <a href="post.php?id=<?=$row['id']?>">
+            szerkesztés</a>
+	</span>
+                </div>
+
+            </div>
+        </div>
+
+
+
+<?php
+
+
+
+    }
+}
+
+?>
+
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+</body>
+</html>
