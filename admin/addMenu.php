@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 if(!isset($_SESSION['id'])) {
@@ -7,15 +6,21 @@ if(!isset($_SESSION['id'])) {
     exit();
 }
 
-
 require_once '../dbConnection.php';
 
 //print_r($_POST);
-$id = (int)$_POST['id'];
+//$id = (int)$_POST['id'];
 
 if (isset($_POST['name'])){
     $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
+}else {
+    print 'nincs nyúlkapiszka!';
+    die();
 }
+
+
+
+
 if (isset($_POST['price'])){
     $price = filter_var($_POST['price'], FILTER_SANITIZE_STRING);
 }
@@ -29,12 +34,16 @@ if (isset($_POST['type'])){
     $type = filter_var($_POST['type'], FILTER_SANITIZE_STRING);
 }
 //$id = 2;
-$sql = "UPDATE menu SET name='$name', price='$price', contains='$contains', img_url='$img', type='$type' WHERE id='$id'";
+
+$sql = "INSERT INTO menu (name, price, contains, img_url, type)
+VALUES ('$name', '$price', '$contains', '$img', '$type')";
+
 if ($conn->query($sql) === TRUE) {
-    echo "Record updated successfully";
+    echo "New record created successfully";
 } else {
-    echo "Error updating record: " . $conn->error;
+    echo "Error: " . $sql . "<br>" . $conn->error;
 }
 
 $conn->close();
 
+echo json_encode('success');

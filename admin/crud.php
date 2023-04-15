@@ -41,24 +41,20 @@ require_once '../dbConnection.php';
 					</div>
 					<div class="col-sm-6">
 						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Menu</span></a>
-						<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+						<a href="../index.php" class="btn btn-danger"><span>Home</span></a>
 					</div>
 				</div>
 			</div>
 			<table class="table table-striped table-hover">
 				<thead>
 					<tr>
-						<th>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="selectAll">
-								<label for="selectAll"></label>
-							</span>
-						</th>
+
 						<th>Name</th>
 						<th>Price</th>
 						<th>Contains</th>
 						<th>Type</th>
 						<th>IMG URL</th>
+						<th>Modify</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -71,16 +67,12 @@ require_once '../dbConnection.php';
                     while ($row = mysqli_fetch_assoc($result)) {
                 ?>
                         <tr>
-                            <td>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox1" name="options[]" value="<?=$row['id']?>">
-								<label for="checkbox1"></label>
-							</span>
-                            </td>
+
                             <td><?=$row['name']?></td>
                             <td>$<?=$row['price']?></td>
                             <td><?=$row['contains']?></td>
                             <td><?=$row['type']?></td>
+                            <td><?=$row['img_url']?></td>
                             <td>
                                 <a href="#editEmployeeModal" class="edit" data-id="<?=$row['id']?>" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                 <a href="#deleteEmployeeModal" class="delete" data-id="<?=$row['id']?>" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
@@ -100,7 +92,10 @@ require_once '../dbConnection.php';
 		</div>
 	</div>
 </div>
-<!-- Edit Modal HTML -->
+
+
+
+<!-- Add new menu Modal HTML -->
 <div id="addEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -112,34 +107,39 @@ require_once '../dbConnection.php';
 				<div class="modal-body">
 					<div class="form-group">
 						<label>Name</label>
-						<input type="text" class="form-control" required>
+						<input  id="name"type="text" class="form-control" required>
 					</div>
 					<div class="form-group">
 						<label>Price</label>
-						<input type="text" class="form-control" required>
+						<input id="price" type="text" class="form-control" required>
 					</div>
 					<div class="form-group">
 						<label>Contains</label>
-						<textarea class="form-control" required></textarea>
+						<textarea id="contains" class="form-control" required></textarea>
 					</div>
 					<div class="form-group">
 						<label>Type</label>
-                        <select class="form-control" required>
+                        <select id="type" class="form-control" required>
                             <option value="1">starters</option>
                             <option value="2">salads</option>
                             <option value="3">specialty</option>
                         </select>
 
 					</div>
+                    <div class="form-group">
+                        <label>IMG url</label>
+                        <input name="img" id="img" class="form-control"></input>
+                    </div>
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-success" value="Add">
+					<input type="submit" class="btn btn-success submit" value="Add">
 				</div>
 			</form>
 		</div>
 	</div>
 </div>
+
 
 
 <!-- Edit Modal HTML -->
@@ -154,24 +154,28 @@ require_once '../dbConnection.php';
 				<div class="modal-body">
 					<div class="form-group">
 						<label>Name</label>
-						<input type="text" name="name" class="form-control" required>
+						<input type="text" name="name" id="name" class="form-control" required>
 					</div>
                     <div class="form-group">
                         <label>Price</label>
-                        <input type="text" name="price" class="form-control" required>
+                        <input type="text" name="price" id="price" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Contains</label>
-                        <textarea name="contains" class="form-control" required></textarea>
+                        <textarea name="contains" id="contains" class="form-control" required></textarea>
                     </div>
                     <div class="form-group">
                         <label>Type</label>
-                        <select name="type" class="form-control" id="type" required>
+                        <select name="type" id="type" class="form-control" id="type" required>
                             <option value="1">starters</option>
                             <option value="2">salads</option>
                             <option value="3">specialty</option>
                         </select>
 
+                    </div>
+                    <div class="form-group">
+                        <label>IMG</label>
+                        <input name="img" id="img" class="form-control"></input>
                     </div>
 				</div>
 				<div class="modal-footer">
@@ -197,7 +201,7 @@ require_once '../dbConnection.php';
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-danger" value="Delete">
+					<input type="submit" class="btn btn-danger confirmdelete" value="Delete">
 				</div>
 			</form>
 		</div>
