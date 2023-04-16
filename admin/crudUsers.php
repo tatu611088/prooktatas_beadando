@@ -6,6 +6,11 @@ if(!isset($_SESSION['id'])) {
     header('Location: ../index.php');
     exit();
 }
+//include_once 'dbh.inc.php';
+//include_once 'User.inc.php';
+include_once 'users/DB.php';
+include_once 'users/viewUser.inc.php';
+
 
 require_once '../dbConnection.php';
 ?>
@@ -24,7 +29,7 @@ require_once '../dbConnection.php';
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<script src="../assets/js/crud.js"></script>
+<script src="../assets/js/crudUser.js"></script>
 
 <script>
 
@@ -37,17 +42,11 @@ require_once '../dbConnection.php';
 			<div class="table-title">
 				<div class="row">
 					<div class="col-sm-6">
-						<h2>Manage <b>Menu</b></h2>
+						<h2>Manage <b>Users</b></h2>
 					</div>
 					<div class="col-sm-6">
-
-
-                            <a href="crudUsers.php" class="btn btn-success"><i class="material-icons">&#xE147;</i> <span>User</span></a>
-
-
-
-
-						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Menu</span></a>
+                        <a href="crud.php" class="btn btn-success" ><i class="material-icons">&#xE147;</i> <span>Menu</span></a>
+						<a href="../registration.php" class="btn btn-success"><i class="material-icons">&#xE147;</i> <span>Add New User</span></a>
 						<a href="../index.php" class="btn btn-danger"><span>Home</span></a>
 					</div>
 				</div>
@@ -57,10 +56,9 @@ require_once '../dbConnection.php';
 					<tr>
 
 						<th>Name</th>
-						<th>Price</th>
-						<th>Contains</th>
-						<th>Type</th>
-						<th>IMG URL</th>
+						<th>E-mail</th>
+						<th>isAdmin</th>
+
 						<th>Modify</th>
 					</tr>
 				</thead>
@@ -68,34 +66,10 @@ require_once '../dbConnection.php';
 
 
                 <?php
-                $query = "SELECT m.name, m.price, m.contains, m.img_url, m.id, mt.type FROM menu AS m LEFT JOIN menu_types AS mt ON m.type = mt.id";
-                $result = mysqli_query($conn, $query);
-                if (mysqli_num_rows($result) > 0) {
-                    while ($row = mysqli_fetch_assoc($result)) {
-                ?>
-                        <tr>
 
-                            <td><?=$row['name']?></td>
-                            <td>$<?=$row['price']?></td>
-                            <td><?=$row['contains']?></td>
-                            <td><?=$row['type']?></td>
-                            <td><?=$row['img_url']?></td>
-                            <td>
-                                <a href="#editEmployeeModal" class="edit" data-id="<?=$row['id']?>" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                <a href="#deleteEmployeeModal" class="delete" data-id="<?=$row['id']?>" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                            </td>
-                        </tr>
-
-                <?php
-                    }
-                }
-                ?>
-                <?php
-                /*
-                ?>
-
-                */
-                ?>
+                $views = new Views();
+                $views->getAllUsers();
+    ?>
 		</div>
 	</div>
 </div>
@@ -106,37 +80,39 @@ require_once '../dbConnection.php';
 <div id="addEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form>
+			<form method="post">
 				<div class="modal-header">
 					<h4 class="modal-title">Add Employee</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">
+                    <input type="hidden" name="addnew" value="1">
 					<div class="form-group">
 						<label>Name</label>
-						<input  id="name"type="text" class="form-control" required>
+						<input id="name" name="name" type="text" class="form-control" required>
 					</div>
 					<div class="form-group">
-						<label>Price</label>
-						<input id="price" type="text" class="form-control" required>
+						<label>E-mail</label>
+						<input id="mail" name="mail" type="text" class="form-control" required>
 					</div>
 					<div class="form-group">
-						<label>Contains</label>
-						<textarea id="contains" class="form-control" required></textarea>
+						<label>Password</label>
+						<input id="password" name="password" class="form-control" required></input>
 					</div>
+                    <div class="form-group">
+                        <label>Password again</label>
+                        <input id="password2" name="password2" class="form-control" required></input>
+                    </div>
 					<div class="form-group">
-						<label>Type</label>
-                        <select id="type" class="form-control" required>
-                            <option value="1">starters</option>
-                            <option value="2">salads</option>
-                            <option value="3">specialty</option>
+						<label>Is admin</label>
+                        <select id="isadmin" name="isadmin" class="form-control" required>
+                            <option value="0">Not Admin</option>
+                            <option value="1">Admin</option>
+
                         </select>
 
 					</div>
-                    <div class="form-group">
-                        <label>IMG url</label>
-                        <input name="img" id="img" class="form-control"></input>
-                    </div>
+
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
@@ -214,6 +190,23 @@ require_once '../dbConnection.php';
 		</div>
 	</div>
 </div>
+
+<?php
+/*
+if (isset($_POST['addnew']) == 1){
+
+    if (isset($_POST['name'])){
+        $name = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
+    }
+    if (isset($_POST['mail'])) {
+        $mail = filter_var($_POST['mail'], FILTER_SANITIZE_EMAIL);
+    }
+    if (isset($_POST['password']), FILTER_SA)
+
+}*/
+?>
+
+
 </body>
 </html>
 

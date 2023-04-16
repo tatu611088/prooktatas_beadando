@@ -80,7 +80,7 @@
 
 <?php
 
-print password_hash('abc', PASSWORD_DEFAULT);
+//print password_hash('abc', PASSWORD_DEFAULT);
 if (isset($_POST['name'])) {
     $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
     $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
