@@ -18,7 +18,7 @@ if (isset($_POST['id'])){
 }
 
 //include_once '../dbh.inc.php';
-include_once 'test.php';
+include_once 'DB.php';
 
 $user = new User();
 $user->deleteUser(2); // töröljük a felhasználót az ID 1 alapján

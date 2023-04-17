@@ -26,25 +26,12 @@ $(document).ready(function(){
     $('.edit').on('click', function() {
         var id = $(this).data('id');
 
-        $.ajax({
-            url: 'getEditModalFill.php',
-            type: 'POST',
-            data: {id: id},
-            success: function(response) {
-                var data = JSON.parse(response);
-                $('input[name=name]').val(data.name);
-                $('input[name=price]').val(data.price);
-                $('input[name=img]').val(data.img_url);
-                $('textarea[name=contains]').val(data.contains);
-                $('#type').val(data.type).prop('selected', true);
-                $('.submit').attr('data-id', id);
 
+        $('#editEmployeeModal #editid').attr('data-id', id);
 
-            },
-            error: function(response) {
-
-            }
-        });
+    /*    $('#name').val($userData.username);
+        $('#mail').val($userData.email);
+        $('#isadmin').val($userData.isadmin);*/
     });
 
     $('.editmenu .submit').on('click', function(e) {

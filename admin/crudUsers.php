@@ -1,5 +1,9 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 
 if(!isset($_SESSION['id'])) {
@@ -13,6 +17,36 @@ include_once 'users/viewUser.inc.php';
 
 
 require_once '../dbConnection.php';
+
+
+
+if (isset($_POST['editid'])){
+
+    if (isset($_POST['name'])){
+        $name = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
+    }
+    if (isset($_POST['mail'])) {
+        $email = filter_var($_POST['mail'], FILTER_SANITIZE_EMAIL);
+    }
+    if (isset($_POST['pswd'])){
+        $password = filter_var($_POST['pswd'], FILTER_SANITIZE_STRING);
+        $passwdHash = password_hash($password, PASSWORD_DEFAULT);
+    }
+    if (isset($_POST['isadmin'])){
+        $isadmin = filter_var($_POST['isadmin'], FILTER_SANITIZE_NUMBER_INT);
+    }
+    if (isset($_POST['editid'])){
+        $id = filter_var($_POST['editid'], FILTER_SANITIZE_NUMBER_INT);
+    }
+
+
+    $userEdit = new User();
+
+    $userEdit->editUser(5, $name, $email, $passwdHash, $isadmin);
+
+
+}
+print_r($_POST);
 ?>
 
 <!DOCTYPE html>
@@ -69,6 +103,7 @@ require_once '../dbConnection.php';
 
                 $views = new Views();
                 $views->getAllUsers();
+                print_r($_GET);
     ?>
 		</div>
 	</div>
@@ -126,40 +161,39 @@ require_once '../dbConnection.php';
 
 
 <!-- Edit Modal HTML -->
-<div id="editEmployeeModal" class="modal fade editmenu">
+<div id="editEmployeeModal" class="modal fade edituser">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form>
+			<form method="post">
 				<div class="modal-header">
 					<h4 class="modal-title">Edit Menu</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">
+                    <input type="hidden" name="editid" id="editid" value="">
 					<div class="form-group">
 						<label>Name</label>
 						<input type="text" name="name" id="name" class="form-control" required>
 					</div>
                     <div class="form-group">
-                        <label>Price</label>
-                        <input type="text" name="price" id="price" class="form-control" required>
+                        <label>Email</label>
+                        <input type="text" name="mail" id="mail" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Contains</label>
-                        <textarea name="contains" id="contains" class="form-control" required></textarea>
+                        <label>Password</label>
+                        <input name="pswd" id="pswd" class="form-control" required></input>
                     </div>
+
                     <div class="form-group">
-                        <label>Type</label>
-                        <select name="type" id="type" class="form-control" id="type" required>
-                            <option value="1">starters</option>
-                            <option value="2">salads</option>
-                            <option value="3">specialty</option>
+                        <label>IsAdmin</label>
+                        <select name="isadmin" id="isadmin" class="form-control" id="type" required>
+                            <option value="0">No admin</option>
+                            <option value="1">Admin</option>
+
                         </select>
 
                     </div>
-                    <div class="form-group">
-                        <label>IMG</label>
-                        <input name="img" id="img" class="form-control"></input>
-                    </div>
+
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
@@ -192,22 +226,22 @@ require_once '../dbConnection.php';
 </div>
 
 <?php
-/*
-if (isset($_POST['addnew']) == 1){
+$getUser = new User();
+$userData = $getUser->getUser(5);
 
-    if (isset($_POST['name'])){
-        $name = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
-    }
-    if (isset($_POST['mail'])) {
-        $mail = filter_var($_POST['mail'], FILTER_SANITIZE_EMAIL);
-    }
-    if (isset($_POST['password']), FILTER_SA)
+//print_r($userData);
 
-}*/
 ?>
 
 
 </body>
+<script>
+    function setFormAction(elem) {
+        var id = elem.getAttribute("data-id");
+        var form = document.getElementById("edit-form");
+        form.action = "crudUsers.php?id=" + id;
+    }
+</script>
 </html>
 
 
