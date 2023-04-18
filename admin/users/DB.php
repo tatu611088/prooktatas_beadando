@@ -43,6 +43,7 @@ class User
         $stmt->execute();
         $stmt->close();
         $mysqli->close();
+
     }
 
     public function getAllUsers()

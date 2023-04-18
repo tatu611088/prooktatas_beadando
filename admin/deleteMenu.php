@@ -7,6 +7,7 @@ if(!isset($_SESSION['id'])) {
 }
 if (isset($_POST['id'])){
     $id = (int)$_POST['id'];
+    $imgURL = filter_var($_POST['imgurl'], FILTER_SANITIZE_URL);
 }else {
     print 'nincs nyúlkapiszka!';
     die();
@@ -18,8 +19,10 @@ require_once '../dbConnection.php';
 $sql = "DELETE FROM menu WHERE id=".$id."";
 
 if ($conn->query($sql) === TRUE) {
-} else {
-    echo "Error deleting record: " . $conn->error;
+
+    if (unlink('../'.$imgURL)) {
+        header("Refresh:0");
+    }
 }
 $conn->close();
 

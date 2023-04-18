@@ -105,7 +105,12 @@ require_once 'dbConnection.php';
 
 
                 <li><span class="logout"><a href="logout.php">Logout</a></span></li>
-                <li><a href="admin/crud.php">Settings</a></li>
+              <?php
+              if (isset($_SESSION['isadmin']) && $_SESSION['isadmin'] == 1){
+                echo '<li><a href="admin/crud.php">Settings</a></li>';
+              }
+              ?>
+
 
             <?php
 }else{
@@ -120,6 +125,8 @@ require_once 'dbConnection.php';
 
             <?php
 }
+
+
             ?>
 
 
@@ -911,10 +918,10 @@ require_once 'dbConnection.php';
             <form action="forms/contact.php" method="post" role="form" class="php-email-form">
               <div class="row">
                 <div class="col-md-6 form-group">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" value="<?php if (isset($_SESSION['name'])){echo $_SESSION['name'];}?>" required>
                 </div>
                 <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" value="<?php if (isset($_SESSION['email'])){echo $_SESSION['email'];}?>" required>
                 </div>
               </div>
               <div class="form-group mt-3">

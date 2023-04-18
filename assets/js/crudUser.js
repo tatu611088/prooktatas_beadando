@@ -24,14 +24,52 @@ $(document).ready(function(){
 
 
     $('.edit').on('click', function() {
-        var id = $(this).data('id');
+         var id = $(this).data('id');
 
 
-        $('#editEmployeeModal #editid').attr('data-id', id);
+        //let id = $('#editEmployeeModal #editid').attr('data-id', id);
 
     /*    $('#name').val($userData.username);
         $('#mail').val($userData.email);
         $('#isadmin').val($userData.isadmin);*/
+
+
+        $.ajax({
+            url: 'users/getEditModalFill.php',
+            type: 'POST',
+            data: {id: id},
+            success: function(response) {
+                console.log(response);
+
+                var data = JSON.parse(response);
+                console.log(data[0].name);
+
+                // alert(data.name);
+                console.log(data.name);
+                console.log('vmi');
+                $('input[name=editid]').val(data[0].id);
+                $('input[name=name]').val(data[0].name);
+                $('input[name=mail]').val(data[0].email);
+                // $('input[name=isadmin]').val(data.isadmin);
+                // $('textarea[name=contains]').val(data.contains);
+                $('#editEmployeeModal #isadmin').val(data[0].isadmin).prop('selected', true);
+                $('.submit').attr('data-id', id);
+
+         /*       $.ajax({
+                    url: 'crudUsers.php',
+                    type: 'POST',
+                    data: {edituserid: id},
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });*/
+
+
+            },
+            error: function(response) {
+
+            }
+        });
     });
 
     $('.editmenu .submit').on('click', function(e) {

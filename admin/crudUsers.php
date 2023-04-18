@@ -6,17 +6,14 @@ error_reporting(E_ALL);
 
 session_start();
 
-if(!isset($_SESSION['id'])) {
+if(!isset($_SESSION['id']) || $_SESSION['isadmin'] == 0) {
     header('Location: ../index.php');
     exit();
 }
-//include_once 'dbh.inc.php';
-//include_once 'User.inc.php';
+
 include_once 'users/DB.php';
 include_once 'users/viewUser.inc.php';
 
-
-require_once '../dbConnection.php';
 
 
 
@@ -42,11 +39,11 @@ if (isset($_POST['editid'])){
 
     $userEdit = new User();
 
-    $userEdit->editUser(5, $name, $email, $passwdHash, $isadmin);
+    $userEdit->editUser($id, $name, $email, $passwdHash, $isadmin);
 
 
 }
-print_r($_POST);
+
 ?>
 
 <!DOCTYPE html>
@@ -103,8 +100,9 @@ print_r($_POST);
 
                 $views = new Views();
                 $views->getAllUsers();
-                print_r($_GET);
+
     ?>
+				</tbody>
 		</div>
 	</div>
 </div>
@@ -226,8 +224,9 @@ print_r($_POST);
 </div>
 
 <?php
+/*
 $getUser = new User();
-$userData = $getUser->getUser(5);
+$userData = $getUser->getUser(2);*/
 
 //print_r($userData);
 
@@ -236,11 +235,7 @@ $userData = $getUser->getUser(5);
 
 </body>
 <script>
-    function setFormAction(elem) {
-        var id = elem.getAttribute("data-id");
-        var form = document.getElementById("edit-form");
-        form.action = "crudUsers.php?id=" + id;
-    }
+
 </script>
 </html>
 

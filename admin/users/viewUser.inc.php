@@ -18,7 +18,7 @@ class Views {
 
 
             print "<td>";
-            print '<a href="#editEmployeeModal" onclick="setFormAction(this)" class="edit" data-id="' . $user["id"] . '" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>';
+            print '<a href="#editEmployeeModal" class="edit" data-id="' . $user["id"] . '" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>';
             print '<a href="#deleteEmployeeModal" class="delete" data-id="' . $user["id"] . '" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>';
             print '</td>';
             print '</tr>';

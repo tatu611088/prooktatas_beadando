@@ -23,6 +23,8 @@ if (isset($_POST['email'])) {
                 if (password_verify($passwd, $row['password'])) {
                     $_SESSION['id'] = $row['id'];
                     $_SESSION['name'] = $row['name'];
+                    $_SESSION['isadmin'] = $row['isadmin'];
+                    $_SESSION['email'] = $row['email'];
                     ob_start();
                     header('Location: index.php');
                     exit();

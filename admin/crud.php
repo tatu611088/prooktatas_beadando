@@ -2,7 +2,7 @@
 
 session_start();
 
-if(!isset($_SESSION['id'])) {
+if(!isset($_SESSION['id']) || $_SESSION['isadmin'] == 0) {
     header('Location: ../index.php');
     exit();
 }
@@ -79,7 +79,7 @@ require_once '../dbConnection.php';
                             <td>$<?=$row['price']?></td>
                             <td><?=$row['contains']?></td>
                             <td><?=$row['type']?></td>
-                            <td><?=$row['img_url']?></td>
+                            <td class="imgurl"><?=$row['img_url']?></td>
                             <td>
                                 <a href="#editEmployeeModal" class="edit" data-id="<?=$row['id']?>" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                 <a href="#deleteEmployeeModal" class="delete" data-id="<?=$row['id']?>" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
@@ -96,6 +96,7 @@ require_once '../dbConnection.php';
 
                 */
                 ?>
+				</tbody>
 		</div>
 	</div>
 </div>
@@ -106,7 +107,7 @@ require_once '../dbConnection.php';
 <div id="addEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form>
+			<form method="post" enctype="multipart/form-data" action="addMenu.php">
 				<div class="modal-header">
 					<h4 class="modal-title">Add Employee</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -114,29 +115,37 @@ require_once '../dbConnection.php';
 				<div class="modal-body">
 					<div class="form-group">
 						<label>Name</label>
-						<input  id="name"type="text" class="form-control" required>
+						<input  id="name" name="name" type="text" class="form-control" required>
 					</div>
 					<div class="form-group">
 						<label>Price</label>
-						<input id="price" type="text" class="form-control" required>
+						<input id="price" name="price" type="text" class="form-control" required>
 					</div>
 					<div class="form-group">
 						<label>Contains</label>
-						<textarea id="contains" class="form-control" required></textarea>
+						<textarea id="contains" name="contains" class="form-control" required></textarea>
 					</div>
 					<div class="form-group">
 						<label>Type</label>
-                        <select id="type" class="form-control" required>
+                        <select id="type" name="type" class="form-control" required>
                             <option value="1">starters</option>
                             <option value="2">salads</option>
                             <option value="3">specialty</option>
                         </select>
 
 					</div>
+					<div class="form-group">
+						<label>IMG</label>
+						<input type="file" name="imgfile" id="imgfile" class="form-control" accept="image/*">
+					</div>
+                <?php
+				/*
                     <div class="form-group">
                         <label>IMG url</label>
-                        <input name="img" id="img" class="form-control"></input>
+                        <input type="text" name="img" id="img" class="form-control" >
                     </div>
+                    */
+                    ?>
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">

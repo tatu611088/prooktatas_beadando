@@ -94,7 +94,7 @@ if (isset($_POST['name'])) {
     require_once 'dbConnection.php';
     $passwdHash = password_hash($passwd, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO user (name, email, password) VALUES ('$name', '$email', '$passwdHash')";
+    $sql = "INSERT INTO user (name, email, password, isadmin) VALUES ('$name', '$email', '$passwdHash', '0')";
 
 
     if ($conn->query($sql) === TRUE) {
